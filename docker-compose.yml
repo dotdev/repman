@@ -93,10 +93,6 @@ services:
       - docker-nginx-scripts:/nginx
       - docker-nginx-ssl-certs:/etc/ssl/certs
       - docker-nginx-ssl-private:/etc/ssl/private
-    build:
-      context: .
-      target: nginx
-      dockerfile: Dockerfile
     logging:
       driver: 'json-file'
       options:
