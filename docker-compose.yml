@@ -34,6 +34,7 @@ services:
       - database
     build:
       context: .
+      target: repman
       dockerfile: Dockerfile
     logging:
       driver: 'json-file'
@@ -76,7 +77,7 @@ services:
 
   nginx:
     <<: *restart_policy
-    image: nginx:1.29-alpine
+    image: nginx:1.17-alpine
     env_file: .env.docker
     command: ['/nginx/start.sh']
     expose:
@@ -89,6 +90,10 @@ services:
       - docker-nginx-scripts:/nginx
       - docker-nginx-ssl-certs:/etc/ssl/certs
       - docker-nginx-ssl-private:/etc/ssl/private
+    build:
+      context: .
+      target: nginx
+      dockerfile: Dockerfile
     logging:
       driver: 'json-file'
       options:

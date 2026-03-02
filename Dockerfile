@@ -1,4 +1,4 @@
-FROM php:8.0.30-fpm-alpine
+FROM php:8.0.30-fpm-alpine AS repman
 
 ARG TIMEZONE="UTC"
 
