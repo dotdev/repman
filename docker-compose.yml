@@ -5,8 +5,8 @@ services:
   database:
     <<: *restart_policy
     image: postgres:18-alpine
-    logging:
-      driver: none
+    # logging:
+    #   driver: none
     environment:
       POSTGRES_USER: main
       POSTGRES_PASSWORD: main
