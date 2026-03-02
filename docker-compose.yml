@@ -32,6 +32,11 @@ services:
       - app-public:/app/public
     depends_on:
       - database
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+        max-file: '3'
 
   consumer:
     <<: *restart_policy
@@ -43,6 +48,11 @@ services:
       - /app/var/cache
     depends_on:
       - app
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+        max-file: '3'
 
   cron:
     <<: *restart_policy
@@ -55,22 +65,32 @@ services:
       - docker-crontabs:/var/spool/cron/crontabs
     depends_on:
       - app
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+        max-file: '3'
 
   nginx:
     <<: *restart_policy
-    image: nginx:1.17-alpine
+    image: nginx:1.29-alpine
     env_file: .env.docker
     command: ['/nginx/start.sh']
-    ports:
-      - 443:443
+    expose:
+      - 443
     depends_on:
       - app
     volumes:
       - app-public:/app/public
-      - docker-logs-nginx:/var/log/nginx
+      #- docker-logs-nginx:/var/log/nginx
       - docker-nginx-scripts:/nginx
       - docker-nginx-ssl-certs:/etc/ssl/certs
       - docker-nginx-ssl-private:/etc/ssl/private
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+        max-file: '3'
 
 volumes:
   postgres-data:
@@ -86,12 +106,12 @@ volumes:
       type: none
       device: $PWD/public
       o: bind
-  docker-logs-nginx:
-    driver: local
-    driver_opts:
-      type: none
-      device: $PWD/docker/logs/nginx
-      o: bind
+  # docker-logs-nginx:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: $PWD/docker/logs/nginx
+  #     o: bind
   docker-nginx-scripts:
     driver: local
     driver_opts:
